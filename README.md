@@ -61,7 +61,7 @@ Clone this repo:
 
 ```bash
 git clone https://github.com/yourusername/js-obfuscation-detector.git
-
+```
 Open index.html in your browser.
 
 If you want to test service worker (offline mode), run a simple local server:
