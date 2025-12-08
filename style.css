@@ -25,6 +25,8 @@ textarea {
     border: 1px solid #444;
     font-size: 14px;
     line-height: 1.4;
+    box-sizing:border-box;
+    resize:vertical;
 }
 
 button {
