@@ -63,80 +63,141 @@ const decoders = {
 };
 
 function detectObfuscation(src) {
-    let s = src.trim();
+  let s = src.trim();
 
-    try {
-        if (/^[A-Za-z0-9+/=]+\s*$/.test(s) && atob(s)) {
-            return "base64";
-        }
-    } catch {}
-
-    if (
-        s.includes('%') &&
-        (/%[0-9A-Fa-f]{2}/.test(s) || s.split('%').length > 4)
-    ) {
-        return "urlencode";
+  // Base64
+  try {
+    if (/^[A-Za-z0-9+/=]+\s*$/.test(s) && atob(s)) {
+      return "base64";
     }
+  } catch {}
 
-    if (/^[\[\]\(\)!+]+$/.test(s)) {
-        return "jsfuck";
+  // URL encode
+  if (
+    s.includes('%') &&
+    (/%[0-9A-Fa-f]{2}/.test(s) || s.split('%').length > 4)
+  ) {
+    return "urlencode";
+  }
+
+  // JSFuck
+  if (/^[\[\]\(\)!+]+$/.test(s)) {
+    return "jsfuck";
+  }
+
+  // JJEncode
+  if (
+    s.includes('$={') ||
+    s.includes('$_=') ||
+    /\$\[[^\]]+\]=/.test(s) ||
+    /^\$+[\s\S]+?\$/.test(s)
+  ) {
+    return "jjencode";
+  }
+
+  // AAEncode
+  if (
+    s.startsWith("ﾟ") ||
+    s.includes("/*´∇｀*/") ||
+    /ﾟ[\s\S]*?ωﾟ/.test(s)
+  ) {
+    return "aaencode";
+  }
+
+  // Dean Edwards Packer
+  if (s.includes("eval(function(p,a,c,k,e,d)") || /\.split\('\|'\)/.test(s)) {
+    return "packer";
+  }
+
+  // Array encode (Obfuscator.io style)
+  if (
+    /var\s*_0x[a-fA-F0-9]{4,}\s*=\s*\[/.test(s) ||
+    /\b_0x[a-fA-F0-9]{4,}\(/.test(s)
+  ) {
+    return "arrayencode";
+  }
+
+  // Number encode
+  if (/var\s+_[0-9a-fA-F]{3,6}\s*=\s*(?:\d+,?)+/.test(s)) {
+    return "_numberencode";
+  }
+
+  // Normal eval obfuscation
+  if (s.includes("eval(")) {
+    if (!/\b(window|document|console)\./i.test(s)) {
+      return "evalencode";
     }
+    return "safe-eval";
+  }
 
-    if (
-        s.includes('$={') ||
-        s.includes('$_=') ||
-        /\$\[[^\]]+\]=/.test(s) ||
-        /^\$+[\s\S]+?\$/.test(s)
-    ) {
-        return "jjencode";
-    }
+  // Hex encode like \x68\x74...
+  if (/\\x[0-9A-Fa-f]{2}/.test(s)) {
+    return "hexencode";
+  }
 
-    if (
-        s.startsWith("ﾟ") ||
-        s.includes("/*´∇｀*/") ||
-        /ﾟ[\s\S]*?ωﾟ/.test(s)
-    ) {
-        return "aaencode";
-    }
+  // **Unicode escape \uXXXX or \u{XXXX}**
+  if (/\\u[0-9a-fA-F]{4}/.test(s) || /\\u\{[0-9a-fA-F]+\}/.test(s)) {
+    return "unicodeescape";
+  }
 
-    if (s.includes("eval(function(p,a,c,k,e,d)") || /\.split\('\|'\)/.test(s)) {
-        return "packer";
-    }
+  // Simple obfuscator.io
+  if (
+    /\bfunction\b/.test(s) &&
+    /var _0x[a-fA-F0-9]+/.test(s) &&
+    /while\s*\(--/.test(s)
+  ) {
+    return "obfuscator.io";
+  }
 
-    // other detect rules omitted for brevity...
-
-    return "none";
+  return "none";
 }
 
-// ===== UI FUNCTION =====
-function checkType() {
-    let code = document.getElementById("inputCode").value.trim();
+// Decode functions
 
-    if (!code) {
-        document.getElementById("resultBox").innerHTML = "❌ Please paste some code!";
-        return;
-    }
-
-    let detected = detectObfuscation(code);
-    let decoded = null;
-
-    if (detected !== "none" && decoders[detected]) {
-        decoded = decoders[detected](code);
-    }
-
-    let output = `<b>Detected:</b> ${detected}<br><br>`;
-    output += `<b>Decoded Output:</b><br>`;
-
-    if (decoded) {
-        output += `<pre style="white-space: pre-wrap; background:#222; padding:10px; border-radius:6px; color:#0f0;">${escapeHtml(decoded)}</pre>`;
-    } else {
-        output += `<i>Failed to decode or no decoder implemented for this type.</i>`;
-    }
-
-    document.getElementById("resultBox").innerHTML = output;
+function decodeUnicodeEscape(str) {
+  try {
+    // We must double-escape backslash for eval to work on a string containing \u escapes
+    // But if input string is already a JS string literal, just eval it directly wrapped in quotes
+    return eval(`"${str}"`);
+  } catch {
+    return null;
+  }
 }
 
-// Helper to escape HTML so output is safe to display
+// Dispatcher map
+const decoders = {
+  unicodeescape: decodeUnicodeEscape,
+  // ... (add others as before)
+};
+
+// UI example function
+function checkTypeAndDecode() {
+  let code = document.getElementById("inputCode").value.trim();
+
+  if (!code) {
+    document.getElementById("resultBox").innerHTML = "❌ Please paste some code!";
+    return;
+  }
+
+  let detected = detectObfuscation(code);
+  let decoded = null;
+
+  if (detected !== "none" && decoders[detected]) {
+    decoded = decoders[detected](code);
+  }
+
+  let output = `<b>Detected:</b> ${detected}<br><br>`;
+  output += `<b>Decoded Output:</b><br>`;
+
+  if (decoded) {
+    output += `<pre style="white-space: pre-wrap; background:#222; padding:10px; border-radius:6px; color:#0f0;">${escapeHtml(decoded)}</pre>`;
+  } else {
+    output += `<i>Failed to decode or no decoder implemented for this type.</i>`;
+  }
+
+  document.getElementById("resultBox").innerHTML = output;
+}
+
 function escapeHtml(text) {
   return text
     .replace(/&/g, "&amp;")
