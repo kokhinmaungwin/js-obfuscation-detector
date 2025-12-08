@@ -38,6 +38,7 @@ button {
     font-size: 16px;
     border-radius: 6px;
     cursor: pointer;
+    text-align: center;
 }
 
 button:hover {
