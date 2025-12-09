@@ -125,7 +125,7 @@ If you find bugs or want new decode types, feel free to open an issue.
 
 ## 👨‍💻 Author
 
-Developed by Khin Maung Win
+Made With by Khin Maung Win
 Offline-ready, fast, and useful for daily JavaScript analysis.
 
 ---
