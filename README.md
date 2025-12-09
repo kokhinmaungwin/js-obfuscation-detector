@@ -31,7 +31,7 @@ This tool can detect multiple types of encoded or obfuscated JavaScript such as:
 
 ## 📁 Folder Structure
 
-```txt
+`
 /js-obfuscation-detector/
 │── index.html
 │── style.css
@@ -43,7 +43,7 @@ This tool can detect multiple types of encoded or obfuscated JavaScript such as:
 │      ├── icon-192.png
 │      └── icon-512.png
 
-```
+`
 ---
 
 ## 📦 Installation (PWA)
