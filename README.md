@@ -36,6 +36,7 @@ This tool can detect multiple types of encoded or obfuscated JavaScript such as:
 │── index.html
 │── style.css
 │── detect.js
+│── main.js
 │── manifest.json
 │── sw.js
 │── /icons/
