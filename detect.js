@@ -1,3 +1,10 @@
+/**
+ * JS Obfuscation Detector & Decoder
+ * Version: 2.0
+ * Author: Khin Maung Win
+ * Description: Detects and decodes multiple JS obfuscation types including base64, jjencode, aaencode, jsfuck, packer, arrayencode, numberencode, hexencode, unicodeescape, and more.
+ * Last Updated: 2025-12-09
+ */
 function escapeHtml(text) {
     return text
       .replace(/&/g, "&amp;")
