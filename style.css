@@ -29,28 +29,24 @@ textarea {
     resize:vertical;
 }
 
-button {
-    margin-top: 12px;
-    padding: 10px 20px;
-    background: #2979ff;
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    justify-content: center;
-}
-
-button:hover {
-    background: #5393ff;
-}
-
 #resultBox {
-    margin-top: 18px;
-    padding: 12px;
+    margin-top: 20px;
     background: #111;
     border-radius: 6px;
-    border: 1px solid #444;
-    font-size: 18px;
-    color: #ffeb3b;
-}
+    padding: 15px;
+    min-height: 120px;
+  }
+  button {
+    margin: 10px 5px 0 0;
+    padding: 8px 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #2979ff;
+    color: #000;
+    font-weight: bold;
+  }
+  button:hover {
+    background: #0c0;
+  }
