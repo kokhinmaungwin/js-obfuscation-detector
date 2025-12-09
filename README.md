@@ -91,6 +91,19 @@ Your tool will be live at:
 
 https://yourusername.github.io/js-obfuscation-detector/
 
+---
+
+# JS Obfuscation Detector & Decoder
+
+**Version:** 2.0  
+**Author:** Khin Maung Win  
+**Description:** This tool detects and decodes various JavaScript obfuscation techniques such as base64, jjencode, aaencode, jsfuck, packer, arrayencode, numberencode, hexencode, unicodeescape, etc.
+
+---
+
+## Usage
+
+Paste your obfuscated JavaScript code into the input box and click "Decode" to see the detected type and the decoded output.
 
 ---
 
