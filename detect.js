@@ -125,32 +125,4 @@ function escapeHtml(text) {
     hexencode: decodeHex,
     unicodeescape: decodeUnicodeEscape,
     // add more if needed
-  };
-
-  // Main UI decode function
-  function checkTypeAndDecode() {
-    let code = document.getElementById("inputCode").value.trim();
-    
-    if (!code) {
-      document.getElementById("resultBox").innerHTML = "❌ Please paste some code!";
-      return;
-    }
-    
-    let detected = detectObfuscation(code);
-    let decoded = null;
-    
-    if (detected !== "none" && decoders[detected]) {
-      decoded = decoders[detected](code);
-    }
-    
-    let output = `<b>Detected:</b> ${detected}<br><br>`;
-    output += `<b>Decoded Output:</b><br>`;
-    
-    if (decoded) {
-      output += `<pre style="white-space: pre-wrap; background:#222; padding:10px; border-radius:6px; color:#0f0;">${escapeHtml(decoded)}</pre>`;
-    } else {
-      output += `<i>Failed to decode or no decoder implemented for this type.</i>`;
-    }
-    
-    document.getElementById("resultBox").innerHTML = output;
-  }
+  }; 
