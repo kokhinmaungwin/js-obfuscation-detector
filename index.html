@@ -20,16 +20,20 @@
 
         <textarea id="inputCode" placeholder="Paste obfuscated JavaScript code here..."></textarea>
 
-<button onclick="checkTypeAndDecode()">Detect & Decode</button>
+        <button onclick="checkTypeAndDecode()">Decode</button>
+        <button onclick="copyResult()">Copy Output</button>
+        <button onclick="clearAll()">Clear</button>
 
-        <div id="resultBox">Result will appear here...</div>
-
+        <div id="resultBox">Decoded output will appear here...</div>
         <button id="installBtn" style="display:none; margin-top:20px;">
             📥 Install App
         </button>
     </div>
 
     <script src="detect.js"></script>
+
+    <script src="main.js"></script>
+
 
     <script>
         // ========== Register Service Worker ==========
