@@ -85,6 +85,30 @@ function escapeHtml(text) {
     }
   }
 
+  function decodeArrayEncode(str) {
+    try {
+      return eval(str);
+    } catch {
+      return null;
+    }
+  }
+
+  function decodeNumberEncode(str) {
+    try {
+      return eval(str);
+    } catch {
+      return null;
+    }
+  }
+
+  function decodeEvalEncode(str) {
+    try {
+      return eval(str);
+    } catch {
+      return null;
+    }
+  }
+ 
   // Detection function
   function detectObfuscation(src) {
     let s = src.trim();
@@ -129,7 +153,24 @@ function escapeHtml(text) {
     jjencode: decodeJJ,
     aaencode: decodeAA,
     packer: decodePacker,
+    arrayencode: decodeArrayEncode,
+    numberencode: decodeNumberEncode,
+    evalencode: decodeEvalEncode,
     hexencode: decodeHex,
     unicodeescape: decodeUnicodeEscape,
-    // add more if needed
-  }; 
+  };
+
+  function recursiveDecode(str, depth = 0, maxDepth = 5) {
+  if (depth >= maxDepth) return str;
+
+  let type = detectObfuscation(str);
+  if (type === "none") return str;
+
+  let decoder = decoders[type];
+  if (!decoder) return str;
+
+  let decoded = decoder(str);
+  if (!decoded) return str;
+
+  return recursiveDecode(decoded, depth + 1, maxDepth);
+}
